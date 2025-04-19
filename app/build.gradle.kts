@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.tudai.chareun.AO1"
-    compileSdk = 34
+    namespace = "com.chareun410.miagenda"
+    compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.tudai.chareun.AO1"
+        applicationId = "com.chareun410.miagenda"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

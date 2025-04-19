@@ -1,4 +1,4 @@
-package com.tudai.chareun.AO1;
+package com.chareun410.miagenda;
 
 import org.junit.Test;
 

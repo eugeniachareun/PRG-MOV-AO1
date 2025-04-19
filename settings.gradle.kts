@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "AO1"
+rootProject.name = "Mi Agenda"
 include(":app")
  
