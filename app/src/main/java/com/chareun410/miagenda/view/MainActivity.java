@@ -1,4 +1,4 @@
-package com.chareun410.miagenda;
+package com.chareun410.miagenda.view;
 
 import android.os.Bundle;
 
