@@ -4,4 +4,7 @@
     <string name="inputUsuario">Usuario</string>
     <string name="inputPassword">Contraseña</string>
     <string name="buttonLogin">Iniciar sesión</string>
+    <string name="contacts">Contactos</string>
+    <string name="search">Buscar</string>
+    <string name="newContact">Nuevo contacto</string>
 </resources>
