@@ -17,6 +17,7 @@ public class ContactsRepository {
     }
 
     private static void initContactList(){
+        list = new ArrayList<Contact>();
         Contact sample1 = new Contact("Eugenia", "Chareun", "555123", "9 de Julio 123", Gender.FEMALE);
         Contact sample2 = new Contact("Martín", "Pescador", "12355", "Galarza 1000", Gender.MALE);
         Contact sample3 = new Contact("Florencia", "Amarillo", "123456", "Los Tulipanes 500", Gender.FEMALE);
