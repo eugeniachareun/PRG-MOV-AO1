@@ -25,10 +25,11 @@
 
             app:toolbarId="@+id/toolbar">
 
-            <androidx.appcompat.widget.Toolbar
+            <FrameLayout
                 android:id="@+id/toolbar"
                 android:layout_width="wrap_content"
-                android:layout_height="67dp">
+                android:layout_height="67dp"
+                android:theme="@style/Theme.AO1">
 
                 <TextView
                     android:id="@+id/textView"
@@ -36,29 +37,19 @@
                     android:layout_height="wrap_content"
                     android:text="@string/contacts"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textColor="#000000"
+                    android:textSize="20sp"
+                    android:layout_gravity="start|center_vertical"
                     android:visibility="visible" />
 
-                <EditText
-                    android:id="@+id/searchText"
+                <SearchView
+                    android:id="@+id/searchView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:inputType="text"
-                    android:visibility="gone"
-                    tools:visibility="invisible" />
+                    android:layout_gravity="end|center_vertical"
+                    android:theme="@style/SearchView"/>
+            </FrameLayout>
 
-                <ImageButton
-                    android:id="@+id/searchButton"
-                    style="@android:style/Widget.ImageButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/search"
-                    android:minWidth="48dp"
-                    android:src="@drawable/ic_search"
-                    tools:ignore="ImageContrastCheck"
-                    tools:visibility="visible" />
-
-            </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 

@@ -38,12 +38,13 @@ public class MainActivity extends AppCompatActivity {
 
         boolean isValid = loginInteractor.validateCredentials(username, password);
 
-        if(isValid) {
+        //TODO descomentar esto, es solo para pruebas
+        //if(isValid) {
             Intent i = new Intent(getApplicationContext(), ContactsActivity.class);
             startActivity(i);
-        } else {
-            Toast.makeText(this, "Credenciales incorrectas", Toast.LENGTH_SHORT).show();
-        }
+        //} else {
+          //  Toast.makeText(this, "Credenciales incorrectas", Toast.LENGTH_SHORT).show();
+        //}
 
     }
 }

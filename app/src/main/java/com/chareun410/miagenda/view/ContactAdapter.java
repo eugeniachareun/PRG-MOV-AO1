@@ -10,11 +10,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chareun410.miagenda.R;
-import com.chareun410.miagenda.databinding.ActivityContactsBinding;
+import com.chareun410.miagenda.data.ContactsRepository;
 import com.chareun410.miagenda.domain.Contact;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.RecursiveAction;
+import java.util.stream.Collectors;
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> {
     private LayoutInflater inflater;
@@ -22,7 +23,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
 
     public ContactAdapter(Context context, List<Contact> list) {
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        this.contactsList = list;
+        this.contactsList = new ArrayList<>(list);
     }
 
     @NonNull
@@ -42,6 +43,29 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     @Override
     public int getItemCount() {
         return contactsList.size();
+    }
+
+    public void buscar(final String textoBuscar) {
+        int longitud = textoBuscar.length();
+        if (longitud == 0) {
+            contactsList.clear();
+            contactsList.addAll(ContactsRepository.getList());
+        } else {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                List<Contact> resultado = ContactsRepository.getList().stream()
+                        .filter(i -> i.getFullname().toLowerCase().contains(textoBuscar.toLowerCase()))
+                        .collect(Collectors.toList());
+                contactsList.clear();
+                contactsList.addAll(resultado);
+            } else {
+                for (Contact c : contactsList) {
+                    if (c.getFullname().toLowerCase().contains(textoBuscar.toLowerCase())) {
+                        contactsList.add(c);
+                    }
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

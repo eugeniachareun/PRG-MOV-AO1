@@ -1,10 +1,7 @@
 package com.chareun410.miagenda.view;
 
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ListView;
+import android.widget.SearchView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,13 +12,13 @@ import com.chareun410.miagenda.databinding.ActivityContactsBinding;
 import com.chareun410.miagenda.domain.Contact;
 import com.chareun410.miagenda.interactor.ContactsInteractor;
 
-import java.util.Collections;
 import java.util.List;
 
-public class ContactsActivity extends AppCompatActivity {
+public class ContactsActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     private ActivityContactsBinding binding;
     private ContactsInteractor contactsInteractor;
+    private ContactAdapter contactAdapter;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
 
@@ -38,7 +35,8 @@ public class ContactsActivity extends AppCompatActivity {
 
         // RecyclerView
         recyclerView = binding.contactsRecyclerView;
-        recyclerView.setAdapter(new ContactAdapter(this, contacts));
+        contactAdapter = new ContactAdapter(this, contacts);
+        recyclerView.setAdapter(contactAdapter);
 
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -46,15 +44,20 @@ public class ContactsActivity extends AppCompatActivity {
         // Contacts Interactor
         contactsInteractor = new ContactsInteractor(this);
 
-        // Search Button
-        ImageButton searchButton = binding.searchButton;
-        searchButton.setOnClickListener(view -> onSearchClick());
+        // SearchView
+        SearchView searchView = binding.searchView;
+        searchView.setOnQueryTextListener(this);
 
     }
 
-    private void onSearchClick() {
-        String searchText = binding.searchText.getText().toString();
-        contactsInteractor.searchContact(searchText);
+    @Override
+    public boolean onQueryTextSubmit(String s) {
+        return false;
+    }
 
+    @Override
+    public boolean onQueryTextChange(String s) {
+        contactAdapter.buscar(s);
+        return false;
     }
 }
