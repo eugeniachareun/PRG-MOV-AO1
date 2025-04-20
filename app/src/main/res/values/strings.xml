@@ -7,4 +7,5 @@
     <string name="contacts">Contactos</string>
     <string name="search">Buscar</string>
     <string name="newContact">Nuevo contacto</string>
+    <string name="buttonEdit">Editar</string>
 </resources>
