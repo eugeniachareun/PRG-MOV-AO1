@@ -1,6 +1,7 @@
 package com.chareun410.miagenda.view;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.SearchView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -59,5 +60,9 @@ public class ContactsActivity extends AppCompatActivity implements SearchView.On
     public boolean onQueryTextChange(String s) {
         contactAdapter.buscar(s);
         return false;
+    }
+
+    public void onClickCallButton(View view) {
+
     }
 }
