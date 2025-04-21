@@ -8,4 +8,6 @@
     <string name="search">Buscar</string>
     <string name="newContact">Nuevo contacto</string>
     <string name="buttonEdit">Editar</string>
+    <string name="buttonDone">Hecho</string>
+    <string name="namePlaceholder">Nombre</string>
 </resources>
