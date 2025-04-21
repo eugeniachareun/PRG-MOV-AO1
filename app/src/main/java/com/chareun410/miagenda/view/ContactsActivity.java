@@ -61,8 +61,4 @@ public class ContactsActivity extends AppCompatActivity implements SearchView.On
         contactAdapter.buscar(s);
         return false;
     }
-
-    public void onClickCallButton(View view) {
-
-    }
 }

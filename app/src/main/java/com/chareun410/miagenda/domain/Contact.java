@@ -1,21 +1,26 @@
 package com.chareun410.miagenda.domain;
 
 public class Contact {
+    private Long id;
     private String name;
     private String lastName;
     private String phone;
     private String address;
     private Gender gender;
+    private static Long contador = 0L;
 
     public Contact() {
+        contador++;
     }
 
     public Contact(String name, String lastName, String phone, String address, Gender gender) {
+        this.id = contador++;
         this.name = name;
         this.lastName = lastName;
         this.phone = phone;
         this.address = address;
         this.gender = gender;
+
     }
 
     public String getName() {
@@ -60,5 +65,9 @@ public class Contact {
 
     public String getFullname() {
         return name + " " + lastName;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

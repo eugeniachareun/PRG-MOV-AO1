@@ -1,9 +1,12 @@
 package com.chareun410.miagenda.view;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -38,6 +41,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         Contact contact = contactsList.get(position);
         holder.name.setText(contact.getFullname());
         holder.phone.setText(contact.getPhone());
+        holder.contactId = contact.getId();
     }
 
     @Override
@@ -68,14 +72,33 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         notifyDataSetChanged();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView name;
         public TextView phone;
+
+        private Long contactId;
+
+        public Long getContactId() {
+            return contactId;
+        }
 
         public ViewHolder(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.text_view_nombre_contacto);
             phone = (TextView) itemView.findViewById(R.id.text_view_numero_contacto);
+            ImageButton callButton = itemView.findViewById(R.id.callButton);
+
+            callButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Context context = view.getContext();
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    String phone = contactsList.get(getAdapterPosition()).getPhone();
+                    intent.setData(Uri.parse("tel:" + phone));
+                    context.startActivity(intent);
+                }
+            });
+
         }
     }
 

@@ -52,7 +52,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/buttonEdit"
-            android:onClick="onClickCallButton"
             android:minWidth="48dp"
             android:src="@android:drawable/ic_menu_edit" />
 
