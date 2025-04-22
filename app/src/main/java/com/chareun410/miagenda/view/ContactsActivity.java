@@ -20,7 +20,6 @@ import java.util.List;
 public class ContactsActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
     private static final String LOG_TAG = ContactsActivity.class.getSimpleName();
     private ActivityContactsBinding binding;
-    private ContactsInteractor contactsInteractor;
     private ContactAdapter contactAdapter;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
@@ -40,9 +39,6 @@ public class ContactsActivity extends AppCompatActivity implements SearchView.On
 
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-
-        // Contacts Interactor
-        contactsInteractor = new ContactsInteractor(this);
 
         // SearchView
         SearchView searchView = binding.searchView;
@@ -81,5 +77,6 @@ public class ContactsActivity extends AppCompatActivity implements SearchView.On
         Log.d(LOG_TAG, "onResume - refresh contact list");
         getContactAdapter().contactsList = ContactsRepository.getList();
         recyclerView.setAdapter(getContactAdapter());
+        binding.searchView.onActionViewCollapsed();
     }
 }
