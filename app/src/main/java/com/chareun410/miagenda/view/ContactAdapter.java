@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chareun410.miagenda.R;
 import com.chareun410.miagenda.data.ContactsRepository;
 import com.chareun410.miagenda.domain.Contact;
+import com.chareun410.miagenda.domain.Gender;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +72,29 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
             }
         }
         notifyDataSetChanged();
+    }
+
+    public void save(String name, String lastName, String phone, String address, Gender gender, boolean isEditing, View view) {
+        Contact contact;
+        if (isEditing) {
+            //TODO buscar por id y asignar
+            contact = new Contact();
+        } else {
+            contact = new Contact();
+        }
+
+        contact.setName(name);
+        contact.setLastName(lastName);
+        contact.setPhone(phone);
+        contact.setAddress(address);
+        contact.setGender(gender);
+
+        ContactsRepository.getList().add(contact);
+        this.contactsList = ContactsRepository.getList();
+
+        notifyDataSetChanged();
+        Context context = view.getContext();
+        Toast.makeText(context, "Contacto guardado", Toast.LENGTH_SHORT).show();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

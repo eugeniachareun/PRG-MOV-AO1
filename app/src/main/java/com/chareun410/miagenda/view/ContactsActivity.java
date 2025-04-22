@@ -2,6 +2,7 @@ package com.chareun410.miagenda.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.SearchView;
 
@@ -17,7 +18,7 @@ import com.chareun410.miagenda.interactor.ContactsInteractor;
 import java.util.List;
 
 public class ContactsActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
-
+    private static final String LOG_TAG = ContactsActivity.class.getSimpleName();
     private ActivityContactsBinding binding;
     private ContactsInteractor contactsInteractor;
     private ContactAdapter contactAdapter;
@@ -32,12 +33,9 @@ public class ContactsActivity extends AppCompatActivity implements SearchView.On
         binding = ActivityContactsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Obtain Contact list
-        List<Contact> contacts = ContactsRepository.getList();
-
         // RecyclerView
         recyclerView = binding.contactsRecyclerView;
-        contactAdapter = new ContactAdapter(this, contacts);
+        contactAdapter = getContactAdapter();
         recyclerView.setAdapter(contactAdapter);
 
         layoutManager = new LinearLayoutManager(this);
@@ -52,6 +50,13 @@ public class ContactsActivity extends AppCompatActivity implements SearchView.On
 
     }
 
+    private ContactAdapter getContactAdapter() {
+        if(contactAdapter == null) {
+            contactAdapter = new ContactAdapter(this, ContactsRepository.getList());
+        }
+        return contactAdapter;
+    }
+
     @Override
     public boolean onQueryTextSubmit(String s) {
         return false;
@@ -59,12 +64,21 @@ public class ContactsActivity extends AppCompatActivity implements SearchView.On
 
     @Override
     public boolean onQueryTextChange(String s) {
-        contactAdapter.buscar(s);
+        getContactAdapter().buscar(s);
         return false;
     }
 
     public void onClickAddButton(View view) {
         Intent i = new Intent(getApplicationContext(), FormActivity.class);
+        i.putExtra("isEditing", false);
         startActivity(i);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(LOG_TAG, "onResume - refresh contact list");
+        getContactAdapter().contactsList = ContactsRepository.getList();
+        recyclerView.setAdapter(getContactAdapter());
     }
 }
