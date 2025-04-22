@@ -3,6 +3,7 @@ package com.chareun410.miagenda.view;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,10 +26,12 @@ import java.util.stream.Collectors;
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> {
     private LayoutInflater inflater;
     protected List<Contact> contactsList;
+    private static final String LOG_TAG = ContactAdapter.class.getSimpleName();
 
     public ContactAdapter(Context context, List<Contact> list) {
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        this.contactsList = new ArrayList<>(list);
+        this.contactsList = new ArrayList<>();
+        this.contactsList.addAll(list);
     }
 
     @NonNull
@@ -54,14 +57,16 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     public void buscar(final String textoBuscar) {
         int longitud = textoBuscar.length();
         if (longitud == 0) {
-            contactsList.clear();
-            contactsList.addAll(ContactsRepository.getList());
+            this.contactsList = new ArrayList<>();
+            this.contactsList.addAll(ContactsRepository.getList());
         } else {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                List<Contact> resultado = ContactsRepository.getList().stream()
+                List<Contact> resultado = contactsList.stream()
                         .filter(i -> i.getFullname().toLowerCase().contains(textoBuscar.toLowerCase()))
                         .collect(Collectors.toList());
-                contactsList.clear();
+
+                // No es lo más eficiente, pero así evitamos vaciar la lista de ContactsRepository
+                this.contactsList = new ArrayList<>();
                 contactsList.addAll(resultado);
             } else {
                 for (Contact c : contactsList) {
@@ -74,23 +79,33 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         notifyDataSetChanged();
     }
 
-    public void save(String name, String lastName, String phone, String address, Gender gender, boolean isEditing, View view) {
-        Contact contact;
-        if (isEditing) {
-            //TODO buscar por id y asignar
+    public void save(String name, String lastName, String phone, String address, Gender gender, Contact contact, View view) {
+        // Si el contacto NO es nulo, se está editando un contacto
+        boolean isEditing = contact != null;
+        if (!isEditing) {
             contact = new Contact();
+            contact.setName(name);
+            contact.setLastName(lastName);
+            contact.setPhone(phone);
+            contact.setAddress(address);
+            contact.setGender(gender);
+            ContactsRepository.getList().add(contact);
         } else {
-            contact = new Contact();
+            List<Contact> lista = ContactsRepository.getList();
+            for (Contact existent: lista) {
+                if (existent.getId().equals(contact.getId())) {
+                    existent.setName(name);
+                    existent.setLastName(lastName);
+                    existent.setPhone(phone);
+                    existent.setAddress(address);
+                    existent.setGender(gender);
+                    break;
+                }
+            }
         }
 
-        contact.setName(name);
-        contact.setLastName(lastName);
-        contact.setPhone(phone);
-        contact.setAddress(address);
-        contact.setGender(gender);
-
-        ContactsRepository.getList().add(contact);
-        this.contactsList = ContactsRepository.getList();
+        this.contactsList = new ArrayList<>();
+        this.contactsList.addAll(ContactsRepository.getList());
 
         notifyDataSetChanged();
         Context context = view.getContext();
@@ -112,6 +127,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
             name = (TextView) itemView.findViewById(R.id.text_view_nombre_contacto);
             phone = (TextView) itemView.findViewById(R.id.text_view_numero_contacto);
             ImageButton callButton = itemView.findViewById(R.id.callButton);
+            ImageButton editButton = itemView.findViewById(R.id.editButton);
 
             callButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -124,6 +140,16 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
                 }
             });
 
+            editButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Context context = view.getContext();
+                    Intent intent = new Intent(context, FormActivity.class);
+                    Contact contact = contactsList.get(getAdapterPosition());
+                    intent.putExtra("contact", contact);
+                    context.startActivity(intent);
+                }
+            });
         }
     }
 

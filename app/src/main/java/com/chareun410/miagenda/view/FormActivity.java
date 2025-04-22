@@ -31,6 +31,11 @@ public class FormActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         ImageButton doneButton = binding.doneButton;
+
+        // If editing, fill fields with previous data
+        Contact contact = (Contact) getIntent().getSerializableExtra("contact");
+        loadPreviousData(contact);
+
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -54,15 +59,30 @@ public class FormActivity extends AppCompatActivity {
                     gender = Gender.MALE;
                 }
 
-                Bundle extras = getIntent().getExtras();
-                boolean isEditing = extras.getBoolean("isEditing");
+                Contact contact = (Contact) getIntent().getSerializableExtra("contact");
+                getContactAdapter().save(name, lastName, phone, address, gender, contact, view);
 
-                getContactAdapter().save(name, lastName, phone, address, gender, isEditing, view);
-
-                // Eliminate Activity and return to previous activity (ContactsActivity)
+                // Eliminate current activity and return to previous activity (ContactsActivity)
                 finish();
             }
         });
+    }
+
+    private void loadPreviousData(Contact contact) {
+        if (contact == null) {
+            return;
+        }
+        binding.formInputName.setText(contact.getName());
+        binding.formInputLastName.setText(contact.getLastName());
+        binding.formInputPhone.setText(contact.getPhone());
+        binding.formInputAddress.setText(contact.getAddress());
+
+        Gender gender = contact.getGender();
+        if (gender == Gender.FEMALE) {
+            binding.genderFemale.setChecked(true);
+        } else {
+            binding.genderMale.setChecked(true);
+        }
     }
 
     private ContactAdapter getContactAdapter() {

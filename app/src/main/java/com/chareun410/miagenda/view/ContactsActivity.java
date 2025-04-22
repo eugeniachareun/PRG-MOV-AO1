@@ -70,7 +70,8 @@ public class ContactsActivity extends AppCompatActivity implements SearchView.On
 
     public void onClickAddButton(View view) {
         Intent i = new Intent(getApplicationContext(), FormActivity.class);
-        i.putExtra("isEditing", false);
+        Contact contact = null;
+        i.putExtra("contact", contact);
         startActivity(i);
     }
 
