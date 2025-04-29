@@ -13,9 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chareun410.miagenda.data.ContactsRepository;
 import com.chareun410.miagenda.databinding.ActivityContactsBinding;
 import com.chareun410.miagenda.domain.Contact;
-import com.chareun410.miagenda.interactor.ContactsInteractor;
-
-import java.util.List;
 
 public class ContactsActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
     private static final String LOG_TAG = ContactsActivity.class.getSimpleName();
