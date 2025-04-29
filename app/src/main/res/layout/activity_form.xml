@@ -49,8 +49,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|center_vertical"
                     android:contentDescription="@string/buttonDone"
-                    android:background="@null"
-                    android:src="@drawable/ic_search" />
+                    android:src="@drawable/ic_check" />
             </FrameLayout>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
