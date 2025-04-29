@@ -61,7 +61,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
             this.contactsList.addAll(ContactsRepository.getList());
         } else {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                List<Contact> resultado = contactsList.stream()
+                List<Contact> resultado = ContactsRepository.getList().stream()
                         .filter(i -> i.getFullname().toLowerCase().contains(textoBuscar.toLowerCase()))
                         .collect(Collectors.toList());
 
