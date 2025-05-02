@@ -1,5 +1,8 @@
 # Mi Agenda - PRG-MOV-AO1
-*Mi Agenda* es una aplicación Android con las siguientes funcionalidades:
+*Mi Agenda* es una aplicación Android que permite operaciones CRUD sobre una lista de contactos.
+
+## Demo
+https://github.com/user-attachments/assets/5a7a2cb2-b4d6-40c1-817b-63877ad12fee
 
 ### Iniciar sesión
   - solo admite las credenciales *pepita / 123*
@@ -20,4 +23,4 @@
 
 ### Editar contacto
   - permite modificar un contacto existente
-  - se precargan los campos nombre, apellido, teléfono, domicilio y género
+  - se precargan los campos nombre, apellido, teléfono, domicilio y género para facilitar la edición
