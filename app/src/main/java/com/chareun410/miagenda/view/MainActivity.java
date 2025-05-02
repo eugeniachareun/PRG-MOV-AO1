@@ -3,6 +3,7 @@ package com.chareun410.miagenda.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -36,13 +37,12 @@ public class MainActivity extends AppCompatActivity {
 
         boolean isValid = loginInteractor.validateCredentials(username, password);
 
-        //TODO descomentar esto, es solo para pruebas
-        //if(isValid) {
+        if(isValid) {
             Intent i = new Intent(getApplicationContext(), ContactsActivity.class);
             startActivity(i);
-        //} else {
-          //  Toast.makeText(this, "Credenciales incorrectas", Toast.LENGTH_SHORT).show();
-        //}
+        } else {
+            Toast.makeText(this, "Credenciales incorrectas", Toast.LENGTH_SHORT).show();
+        }
 
     }
 }

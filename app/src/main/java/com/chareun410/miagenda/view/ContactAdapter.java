@@ -3,7 +3,6 @@ package com.chareun410.miagenda.view;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -147,6 +146,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
                     Intent intent = new Intent(context, FormActivity.class);
                     Contact contact = contactsList.get(getAdapterPosition());
                     intent.putExtra("contact", contact);
+                    intent.putExtra("title", "Editar");
                     context.startActivity(intent);
                 }
             });

@@ -65,6 +65,7 @@ public class ContactsActivity extends AppCompatActivity implements SearchView.On
         Intent i = new Intent(getApplicationContext(), FormActivity.class);
         Contact contact = null;
         i.putExtra("contact", contact);
+        i.putExtra("title", "Agregar");
         startActivity(i);
     }
 
