@@ -1,10 +1,15 @@
 package com.chareun410.miagenda.view;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -40,6 +45,14 @@ public class ContactsActivity extends AppCompatActivity implements SearchView.On
         // SearchView
         SearchView searchView = binding.searchView;
         searchView.setOnQueryTextListener(this);
+        // Mostrar/ocultar boton de cerrar sesión al abrir/cerrar la búsqueda
+        searchView.setOnSearchClickListener(view -> onSearchClick());
+        searchView.setOnCloseListener(this::onSearchClose);
+
+
+        // Close Button
+        ImageButton closeButton = binding.closeButton;
+        closeButton.setOnClickListener(view -> onCloseClick());
 
     }
 
@@ -77,4 +90,28 @@ public class ContactsActivity extends AppCompatActivity implements SearchView.On
         recyclerView.setAdapter(getContactAdapter());
         binding.searchView.onActionViewCollapsed();
     }
+
+    private void onCloseClick() {
+        SharedPreferences preferencias = getSharedPreferences("agenda", Context.MODE_PRIVATE);
+        preferencias.edit().putString("auth","NO").apply();
+        goToLoginActivity();
+    }
+
+    private void goToLoginActivity() {
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(i);
+    }
+
+    private void onSearchClick() {
+        ImageButton closeButton = binding.closeButton;
+        closeButton.setVisibility(View.GONE);
+    }
+
+    private boolean onSearchClose() {
+        ImageButton closeButton = binding.closeButton;
+        closeButton.setVisibility(View.VISIBLE);
+        return  false;
+    }
+
+
 }

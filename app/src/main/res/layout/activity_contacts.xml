@@ -27,7 +27,7 @@
 
             <FrameLayout
                 android:id="@+id/toolbar"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="67dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
@@ -48,8 +48,18 @@
                     android:id="@+id/searchView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="end|center_vertical"
+                    android:layout_gravity="center|center_vertical"
                     android:theme="@style/SearchView" />
+
+                <ImageButton
+                    android:id="@+id/closeButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|end"
+                    android:contentDescription="@string/salir"
+                    android:src="@android:drawable/ic_menu_close_clear_cancel"
+                    android:visibility="visible"/>
+
             </FrameLayout>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
