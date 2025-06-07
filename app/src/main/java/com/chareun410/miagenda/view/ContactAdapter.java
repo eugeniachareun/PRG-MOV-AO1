@@ -123,6 +123,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
             phone = (TextView) itemView.findViewById(R.id.text_view_numero_contacto);
             ImageButton callButton = itemView.findViewById(R.id.callButton);
             ImageButton editButton = itemView.findViewById(R.id.editButton);
+            ImageButton deleteButton = itemView.findViewById(R.id.deleteButton);
 
             callButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -144,6 +145,17 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
                     intent.putExtra("contact", contact);
                     intent.putExtra("title", "Editar");
                     context.startActivity(intent);
+                }
+            });
+
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Contact contact = contactsList.get(getAdapterPosition());
+
+                    repository.delete(contact.getId());
+
+                    notifyItemRemoved(getAdapterPosition());
                 }
             });
         }
