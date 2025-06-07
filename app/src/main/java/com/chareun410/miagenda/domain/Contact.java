@@ -9,14 +9,10 @@ public class Contact implements Serializable {
     private String phone;
     private String address;
     private Gender gender;
-    private static Long contador = 0L;
 
-    public Contact() {
-        contador++;
-    }
+    public Contact(){}
 
     public Contact(String name, String lastName, String phone, String address, Gender gender) {
-        this.id = contador++;
         this.name = name;
         this.lastName = lastName;
         this.phone = phone;
@@ -71,5 +67,9 @@ public class Contact implements Serializable {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

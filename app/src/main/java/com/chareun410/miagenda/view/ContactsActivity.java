@@ -6,16 +6,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.chareun410.miagenda.data.ContactsRepository;
+import com.chareun410.miagenda.data.sqlite.ContactsRepository;
 import com.chareun410.miagenda.databinding.ActivityContactsBinding;
 import com.chareun410.miagenda.domain.Contact;
 
@@ -26,9 +24,13 @@ public class ContactsActivity extends AppCompatActivity implements SearchView.On
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
 
+    private ContactsRepository repository;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        repository = new ContactsRepository(this);
 
         // View's Binding
         binding = ActivityContactsBinding.inflate(getLayoutInflater());
@@ -58,7 +60,7 @@ public class ContactsActivity extends AppCompatActivity implements SearchView.On
 
     private ContactAdapter getContactAdapter() {
         if(contactAdapter == null) {
-            contactAdapter = new ContactAdapter(this, ContactsRepository.getList());
+            contactAdapter = new ContactAdapter(this, repository);
         }
         return contactAdapter;
     }
@@ -86,7 +88,7 @@ public class ContactsActivity extends AppCompatActivity implements SearchView.On
     protected void onResume() {
         super.onResume();
         Log.d(LOG_TAG, "onResume - refresh contact list");
-        getContactAdapter().contactsList = ContactsRepository.getList();
+        getContactAdapter().contactsList = repository.getAll();
         recyclerView.setAdapter(getContactAdapter());
         binding.searchView.onActionViewCollapsed();
     }

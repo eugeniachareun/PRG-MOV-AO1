@@ -10,7 +10,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.chareun410.miagenda.R;
-import com.chareun410.miagenda.data.ContactsRepository;
+import com.chareun410.miagenda.data.sqlite.ContactsRepository;
 import com.chareun410.miagenda.databinding.ActivityFormBinding;
 import com.chareun410.miagenda.domain.Contact;
 import com.chareun410.miagenda.domain.Gender;
@@ -20,9 +20,13 @@ public class FormActivity extends AppCompatActivity {
     private ActivityFormBinding binding;
     private ContactAdapter contactAdapter;
 
+    private ContactsRepository repository;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        repository = new ContactsRepository(this);
 
         // View's Binding
         binding = ActivityFormBinding.inflate(getLayoutInflater());
@@ -63,7 +67,8 @@ public class FormActivity extends AppCompatActivity {
         }
 
         Contact contact = (Contact) getIntent().getSerializableExtra("contact");
-        getContactAdapter().save(name, lastName, phone, address, gender, contact, view);
+        long id = contact != null ? contact.getId() : -1;
+        getContactAdapter().save(id, name, lastName, phone, address, gender, view);
 
         // Eliminate current activity and return to previous activity (ContactsActivity)
         finish();
@@ -88,7 +93,7 @@ public class FormActivity extends AppCompatActivity {
 
     private ContactAdapter getContactAdapter() {
         if(contactAdapter == null) {
-            contactAdapter = new ContactAdapter(this, ContactsRepository.getList());
+            contactAdapter = new ContactAdapter(this, repository);
         }
         return contactAdapter;
     }
