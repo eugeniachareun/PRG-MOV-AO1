@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chareun410.miagenda.R;
-import com.chareun410.miagenda.data.ContactsRepository;
+import com.chareun410.miagenda.data.sqlite.ContactsRepository;
 import com.chareun410.miagenda.domain.Contact;
 import com.chareun410.miagenda.domain.Gender;
 
@@ -27,10 +27,13 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     protected List<Contact> contactsList;
     private static final String LOG_TAG = ContactAdapter.class.getSimpleName();
 
-    public ContactAdapter(Context context, List<Contact> list) {
+    private  ContactsRepository repository;
+
+    public ContactAdapter(Context context, ContactsRepository repository) {
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.contactsList = new ArrayList<>();
-        this.contactsList.addAll(list);
+        this.contactsList.addAll(repository.getAll());
+        this.repository = repository;
     }
 
     @NonNull
@@ -55,12 +58,13 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
 
     public void buscar(final String textoBuscar) {
         int longitud = textoBuscar.length();
+        List<Contact> dbList = repository.getAll();
         if (longitud == 0) {
             this.contactsList = new ArrayList<>();
-            this.contactsList.addAll(ContactsRepository.getList());
+            this.contactsList.addAll(dbList);
         } else {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                List<Contact> resultado = ContactsRepository.getList().stream()
+                List<Contact> resultado = dbList.stream()
                         .filter(i -> i.getFullname().toLowerCase().contains(textoBuscar.toLowerCase()))
                         .collect(Collectors.toList());
 
@@ -78,33 +82,25 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         notifyDataSetChanged();
     }
 
-    public void save(String name, String lastName, String phone, String address, Gender gender, Contact contact, View view) {
-        // Si el contacto NO es nulo, se está editando un contacto
-        boolean isEditing = contact != null;
+    public void save(Long id, String name, String lastName, String phone, String address, Gender gender, View view) {
+        // Si el contacto es DISTINTO de -1, se está editando un contacto
+
+        boolean isEditing = id != -1;
+
+        Contact contact = new Contact();
+        contact.setName(name);
+        contact.setLastName(lastName);
+        contact.setPhone(phone);
+        contact.setAddress(address);
+        contact.setGender(gender);
         if (!isEditing) {
-            contact = new Contact();
-            contact.setName(name);
-            contact.setLastName(lastName);
-            contact.setPhone(phone);
-            contact.setAddress(address);
-            contact.setGender(gender);
-            ContactsRepository.getList().add(contact);
+            repository.insert(contact);
         } else {
-            List<Contact> lista = ContactsRepository.getList();
-            for (Contact existent: lista) {
-                if (existent.getId().equals(contact.getId())) {
-                    existent.setName(name);
-                    existent.setLastName(lastName);
-                    existent.setPhone(phone);
-                    existent.setAddress(address);
-                    existent.setGender(gender);
-                    break;
-                }
-            }
+            repository.update(id, contact);
         }
 
         this.contactsList = new ArrayList<>();
-        this.contactsList.addAll(ContactsRepository.getList());
+        this.contactsList.addAll(repository.getAll());
 
         notifyDataSetChanged();
         Context context = view.getContext();
@@ -115,9 +111,9 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         public TextView name;
         public TextView phone;
 
-        private Long contactId;
+        private long contactId;
 
-        public Long getContactId() {
+        public long getContactId() {
             return contactId;
         }
 
@@ -127,6 +123,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
             phone = (TextView) itemView.findViewById(R.id.text_view_numero_contacto);
             ImageButton callButton = itemView.findViewById(R.id.callButton);
             ImageButton editButton = itemView.findViewById(R.id.editButton);
+            ImageButton deleteButton = itemView.findViewById(R.id.deleteButton);
 
             callButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -148,6 +145,17 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
                     intent.putExtra("contact", contact);
                     intent.putExtra("title", "Editar");
                     context.startActivity(intent);
+                }
+            });
+
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Contact contact = contactsList.get(getAdapterPosition());
+
+                    repository.delete(contact.getId());
+
+                    notifyItemRemoved(getAdapterPosition());
                 }
             });
         }
